@@ -1,0 +1,14 @@
+{
+  "author": "Giacomo Ritucci (https://github.com/rjack)",
+  "name": "yata",
+  "private": true,
+  "description": "Yet Another TODO Application",
+  "version": "0.0.0",
+  "repository": {
+    "url": ""
+  },
+  "dependencies": {
+      "couchapp": "*"
+  },
+  "devDependencies": {}
+}
