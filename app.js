@@ -27,21 +27,32 @@ ddoc.views.by_collection = {
 };
 
 
+
 ddoc.views.by_tags = {
+    // key: tag
+    // value: title oppure inizio della description oppure null
     map: function (doc) {
+        var blurb;
         if (doc.tags) {
+            var blurb = doc.title;
+            if (!blurb && doc.description) {
+                blurb = doc.description.split(' ').slice(0, 5).join(' ') + ' [...]';
+            }
             for (var idx in doc.tags) {
-                emit(doc.tags[idx], doc.description);
+                emit(doc.tags[idx], blurb || null)
             }
         }
     },
 
+    // key: tag
+    // value: numero di doc con quella tag
+    // Usabile per fare il tag cloud
     reduce: function (keys, values, rereduce) {
         if (rereduce)
             return sum(values);
         return keys.length;
     }
-}
+};
 
 couchapp.loadAttachments(ddoc, path.join(__dirname, 'attachments'));
 
