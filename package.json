@@ -5,7 +5,7 @@
   "description": "Yet Another TODO Application",
   "version": "0.0.0",
   "repository": {
-    "url": ""
+    "url": "git://github.com/rjack/yata.git"
   },
   "dependencies": {
       "couchapp": "*"
