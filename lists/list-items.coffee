@@ -1,11 +1,15 @@
 (head, req) ->
+    Mustache = require 'vendor/lib/mustache'
+
     provides 'html', ->
         start headers:
             'Content-Type': 'text/html'
 
-        send '<ul>'
-        while row = getRow()
-            send "<li><a href=\"/yata/_design/yata/_show/item/#{row.id}\">#{row.value.doc_title}</li>"
+        rows = while (row = getRow())
+            #JSON.stringify row
+            row
 
-        send '</ul>'
-
+        send Mustache.to_html @templates.html5,
+            title: 'Listona'
+            rows: rows
+            "list?": true

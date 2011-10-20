@@ -2,12 +2,20 @@
 <html>
 
   <head>
-    <title>{{ title }} | YATA</title>
+    <title>{{title}} | YATA</title>
   </head>
 
   <body>
-    <h1>{{ title }}</h1>
+    <h1>{{title}}</h1>
 
-    {{ description }}
+    {{description}}
+
+    {{#list?}}
+      <ul>
+        {{#rows}}
+          <li><a href="/yata/_design/yata/_show/item/{{id}}">{{#value}}{{doc_title}}{{/value}}</a></li>
+        {{/rows}}
+      </ul>
+    {{/list?}}
   </body>
 </html>
