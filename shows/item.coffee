@@ -7,4 +7,4 @@ Mustache = require 'vendor/lib/mustache'
             'Content-Type': 'text/html'
 
 
-        Mustache.to_html "<h1>{{title}}</h1><p>{{description}}</p>", doc
+        Mustache.to_html @templates.html5, doc
