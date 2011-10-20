@@ -1,7 +1,10 @@
+Mustache = require 'vendor/lib/mustache'
+
 (doc, req) ->
     provides 'html', ->
+
         start headers:
             'Content-Type': 'text/html'
 
 
-        "<h1>#{doc.title}</h1><p>#{doc.description}</p>"
+        Mustache.to_html "<h1>{{title}}</h1><p>{{description}}</p>", doc
