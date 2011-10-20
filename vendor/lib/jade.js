@@ -46,6 +46,58 @@ require.relative = function (parent) {
   };
 
 
+require.register("inline-tags.js", function(module, exports, require){
+
+/*!
+ * Jade - inline tags
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+module.exports = [
+    'a'
+  , 'abbr'
+  , 'acronym'
+  , 'b'
+  , 'br'
+  , 'code'
+  , 'em'
+  , 'font'
+  , 'i'
+  , 'img'
+  , 'ins'
+  , 'kbd'
+  , 'map'
+  , 'samp'
+  , 'small'
+  , 'span'
+  , 'strong'
+  , 'sub'
+  , 'sup'
+];
+}); // module: inline-tags.js
+
+require.register("self-closing.js", function(module, exports, require){
+
+/*!
+ * Jade - self closing tags
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+module.exports = [
+    'meta'
+  , 'img'
+  , 'link'
+  , 'input'
+  , 'area'
+  , 'base'
+  , 'col'
+  , 'br'
+  , 'hr'
+];
+}); // module: self-closing.js
+
 require.register("compiler.js", function(module, exports, require){
 
 /*!
@@ -203,6 +255,39 @@ Compiler.prototype = {
     var name = node.constructor.name
       || node.constructor.toString().match(/function ([^(\s]+)()/)[1];
     return this['visit' + name](node);
+  },
+
+  /**
+   * Visit case `node`.
+   *
+   * @param {Literal} node
+   * @api public
+   */
+
+  visitCase: function(node){
+    var _ = this.withinCase;
+    this.withinCase = true;
+    this.buf.push('switch (' + node.expr + '){');
+    this.visit(node.block);
+    this.buf.push('}');
+    this.withinCase = _;
+  },
+  
+  /**
+   * Visit when `node`.
+   *
+   * @param {Literal} node
+   * @api public
+   */
+
+  visitWhen: function(node){
+    if ('default' == node.expr) {
+      this.buf.push('default:');
+    } else {
+      this.buf.push('case ' + node.expr + ':');
+    }
+    this.visit(node.block);
+    this.buf.push('  break;');
   },
 
   /**
@@ -386,8 +471,8 @@ Compiler.prototype = {
   
   visitBlockComment: function(comment){
     if (!comment.buffer) return;
-    if (0 == comment.val.indexOf('if')) {
-      this.buffer('<!--[' + comment.val + ']>');
+    if (0 == comment.val.trim().indexOf('if')) {
+      this.buffer('<!--[' + comment.val.trim() + ']>');
       this.visit(comment.block);
       this.buffer('<![endif]-->');
     } else {
@@ -511,359 +596,6 @@ function escape(html){
 }
 
 }); // module: compiler.js
-
-require.register("doctypes.js", function(module, exports, require){
-
-/*!
- * Jade - doctypes
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-module.exports = {
-    '5': '<!DOCTYPE html>'
-  , 'xml': '<?xml version="1.0" encoding="utf-8" ?>'
-  , 'default': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
-  , 'transitional': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
-  , 'strict': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
-  , 'frameset': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">'
-  , '1.1': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
-  , 'basic': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">'
-  , 'mobile': '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">'
-};
-}); // module: doctypes.js
-
-require.register("filters.js", function(module, exports, require){
-
-/*!
- * Jade - filters
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-module.exports = {
-  
-  /**
-   * Wrap text with CDATA block.
-   */
-  
-  cdata: function(str){
-    return '<![CDATA[\\n' + str + '\\n]]>';
-  },
-  
-  /**
-   * Transform sass to css, wrapped in style tags.
-   */
-  
-  sass: function(str){
-    str = str.replace(/\\n/g, '\n');
-    var sass = require('sass').render(str).replace(/\n/g, '\\n');
-    return '<style type="text/css">' + sass + '</style>'; 
-  },
-  
-  /**
-   * Transform stylus to css, wrapped in style tags.
-   */
-  
-  stylus: function(str, options){
-    var ret;
-    str = str.replace(/\\n/g, '\n');
-    var stylus = require('stylus');
-    stylus(str, options).render(function(err, css){
-      if (err) throw err;
-      ret = css.replace(/\n/g, '\\n');
-    });
-    return '<style type="text/css">' + ret + '</style>'; 
-  },
-  
-  /**
-   * Transform less to css, wrapped in style tags.
-   */
-  
-  less: function(str){
-    var ret;
-    str = str.replace(/\\n/g, '\n');
-    require('less').render(str, function(err, css){
-      if (err) throw err;
-      ret = '<style type="text/css">' + css.replace(/\n/g, '\\n') + '</style>';  
-    });
-    return ret;
-  },
-  
-  /**
-   * Transform markdown to html.
-   */
-  
-  markdown: function(str){
-    var md;
-
-    // support markdown / discount
-    try {
-      md = require('markdown');
-    } catch (err){
-      try {
-        md = require('discount');
-      } catch (err) {
-        try {
-          md = require('markdown-js');
-        } catch (err) {
-          throw new Error('Cannot find markdown library, install markdown or discount');
-        }
-      }
-    }
-
-    str = str.replace(/\\n/g, '\n');
-    return md.parse(str).replace(/\n/g, '\\n').replace(/'/g,'&#39;');
-  },
-  
-  /**
-   * Transform coffeescript to javascript.
-   */
-
-  coffeescript: function(str){
-    str = str.replace(/\\n/g, '\n');
-    var js = require('coffee-script').compile(str).replace(/\n/g, '\\n');
-    return '<script type="text/javascript">\\n' + js + '</script>';
-  }
-};
-
-}); // module: filters.js
-
-require.register("inline-tags.js", function(module, exports, require){
-
-/*!
- * Jade - inline tags
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-module.exports = [
-    'a'
-  , 'abbr'
-  , 'acronym'
-  , 'b'
-  , 'br'
-  , 'code'
-  , 'em'
-  , 'font'
-  , 'i'
-  , 'img'
-  , 'ins'
-  , 'kbd'
-  , 'map'
-  , 'samp'
-  , 'small'
-  , 'span'
-  , 'strong'
-  , 'sub'
-  , 'sup'
-];
-}); // module: inline-tags.js
-
-require.register("jade.js", function(module, exports, require){
-
-/*!
- * Jade
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/**
- * Module dependencies.
- */
-
-var Parser = require('./parser')
-  , Lexer = require('./lexer')
-  , Compiler = require('./compiler')
-  , runtime = require('./runtime')
-
-/**
- * Library version.
- */
-
-exports.version = '0.16.1';
-
-/**
- * Expose self closing tags.
- */
-
-exports.selfClosing = require('./self-closing');
-
-/**
- * Default supported doctypes.
- */
-
-exports.doctypes = require('./doctypes');
-
-/**
- * Text filters.
- */
-
-exports.filters = require('./filters');
-
-/**
- * Utilities.
- */
-
-exports.utils = require('./utils');
-
-/**
- * Expose `Compiler`.
- */
-
-exports.Compiler = Compiler;
-
-/**
- * Expose `Parser`.
- */
-
-exports.Parser = Parser;
-
-/**
- * Expose `Lexer`.
- */
-
-exports.Lexer = Lexer;
-
-/**
- * Nodes.
- */
-
-exports.nodes = require('./nodes');
-
-/**
- * Jade runtime helpers.
- */
-
-exports.runtime = runtime;
-
-/**
- * Template function cache.
- */
-
-exports.cache = {};
-
-/**
- * Parse the given `str` of jade and return a function body.
- *
- * @param {String} str
- * @param {Object} options
- * @return {String}
- * @api private
- */
-
-function parse(str, options){
-  try {
-    // Parse
-    var parser = new Parser(str, options.filename, options);
-
-    // Compile
-    var compiler = new (options.compiler || Compiler)(parser.parse(), options)
-      , js = compiler.compile();
-
-    // Debug compiler
-    if (options.debug) {
-      console.error('\nCompiled Function:\n\n\033[90m%s\033[0m', js.replace(/^/gm, '  '));
-    }
-
-    return ''
-      + 'var buf = [];\n'
-      + (options.self
-        ? 'var self = locals || {};\n' + js
-        : 'with (locals || {}) {\n' + js + '\n}\n')
-      + 'return buf.join("");';
-  } catch (err) {
-    parser = parser.context();
-    runtime.rethrow(err, parser.filename, parser.lexer.lineno);
-  }
-}
-
-/**
- * Compile a `Function` representation of the given jade `str`.
- *
- * Options:
- * 
- *   - `compileDebug` when `false` debugging code is stripped from the compiled template
- *   - `client` when `true` the helper functions `escape()` etc will reference `jade.escape()`
- *      for use with the Jade client-side runtime.js
- *
- * @param {String} str
- * @param {Options} options
- * @return {Function}
- * @api public
- */
-
-exports.compile = function(str, options){
-  var options = options || {}
-    , client = options.client
-    , filename = options.filename
-      ? JSON.stringify(options.filename)
-      : 'undefined'
-    , fn;
-
-  if (options.compileDebug !== false) {
-    fn = [
-        'var __ = [{ lineno: 1, filename: ' + filename + ' }];'
-      , 'try {'
-      , parse(String(str), options || {})
-      , '} catch (err) {'
-      , '  rethrow(err, __[0].filename, __[0].lineno);'
-      , '}'
-    ].join('\n');
-  } else {
-    fn = parse(String(str), options || {});
-  }
-
-  if (client) {
-    fn = 'var attrs = jade.attrs, escape = jade.escape, rethrow = jade.rethrow;\n' + fn;
-  }
-
-  fn = new Function('locals, attrs, escape, rethrow', fn);
-
-  if (client) return fn;
-
-  return function(locals){
-    return fn(locals, runtime.attrs, runtime.escape, runtime.rethrow);
-  };
-};
-
-/**
- * Render the given `str` of jade and invoke
- * the callback `fn(err, str)`.
- *
- * Options:
- *
- *   - `cache` enable template caching
- *   - `filename` filename required for `include` / `extends` and caching
- *
- * @param {String} str
- * @param {Object|Function} options or fn
- * @param {Function} fn
- * @api public
- */
-
-exports.render = function(str, options, fn){
-  // swap args
-  if ('function' == typeof options) {
-    fn = options, options = {};
-  }
-
-  // cache requires .filename
-  if (options.cache && !options.filename) {
-    return fn(new Error('the "filename" option is required for caching'));
-  }
-
-  try {
-    var path = options.filename;
-    var tmpl = options.cache
-      ? exports.cache[path] || (exports.cache[path] = exports.compile(str, options))
-      : exports.compile(str, options);
-    fn(null, tmpl(options));
-  } catch (err) {
-    fn(err);
-  }
-};
-}); // module: jade.js
 
 require.register("lexer.js", function(module, exports, require){
 
@@ -1133,16 +865,40 @@ Lexer.prototype = {
   },
 
   /**
+   * Case.
+   */
+  
+  case: function() {
+    return this.scan(/^case +([^\n]+)/, 'case');
+  },
+
+  /**
+   * When.
+   */
+  
+  when: function() {
+    return this.scan(/^when +([^:\n]+)/, 'when');
+  },
+
+  /**
+   * Default.
+   */
+  
+  default: function() {
+    return this.scan(/^default */, 'default');
+  },
+
+  /**
    * Assignment.
    */
   
   assignment: function() {
     var captures;
-    if (captures = /^(\w+) += *([^\n]+)/.exec(this.input)) {
+    if (captures = /^(\w+) += *([^;\n]+)( *;? *)/.exec(this.input)) {
       this.consume(captures[0].length);
       var name = captures[1]
         , val = captures[2];
-      return this.tok('code', 'var ' + name + ' = (' + val + ')');
+      return this.tok('code', 'var ' + name + ' = (' + val + ');');
     }
   },
 
@@ -1475,6 +1231,9 @@ Lexer.prototype = {
       || this.eos()
       || this.pipelessText()
       || this.doctype()
+      || this.case()
+      || this.when()
+      || this.default()
       || this.extends()
       || this.block()
       || this.include()
@@ -1498,10 +1257,106 @@ Lexer.prototype = {
 
 }); // module: lexer.js
 
-require.register("nodes/block-comment.js", function(module, exports, require){
+require.register("filters.js", function(module, exports, require){
 
 /*!
- * Jade - nodes - BlockComment
+ * Jade - filters
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+module.exports = {
+  
+  /**
+   * Wrap text with CDATA block.
+   */
+  
+  cdata: function(str){
+    return '<![CDATA[\\n' + str + '\\n]]>';
+  },
+  
+  /**
+   * Transform sass to css, wrapped in style tags.
+   */
+  
+  sass: function(str){
+    str = str.replace(/\\n/g, '\n');
+    var sass = require('sass').render(str).replace(/\n/g, '\\n');
+    return '<style type="text/css">' + sass + '</style>'; 
+  },
+  
+  /**
+   * Transform stylus to css, wrapped in style tags.
+   */
+  
+  stylus: function(str, options){
+    var ret;
+    str = str.replace(/\\n/g, '\n');
+    var stylus = require('stylus');
+    stylus(str, options).render(function(err, css){
+      if (err) throw err;
+      ret = css.replace(/\n/g, '\\n');
+    });
+    return '<style type="text/css">' + ret + '</style>'; 
+  },
+  
+  /**
+   * Transform less to css, wrapped in style tags.
+   */
+  
+  less: function(str){
+    var ret;
+    str = str.replace(/\\n/g, '\n');
+    require('less').render(str, function(err, css){
+      if (err) throw err;
+      ret = '<style type="text/css">' + css.replace(/\n/g, '\\n') + '</style>';  
+    });
+    return ret;
+  },
+  
+  /**
+   * Transform markdown to html.
+   */
+  
+  markdown: function(str){
+    var md;
+
+    // support markdown / discount
+    try {
+      md = require('markdown');
+    } catch (err){
+      try {
+        md = require('discount');
+      } catch (err) {
+        try {
+          md = require('markdown-js');
+        } catch (err) {
+          throw new Error('Cannot find markdown library, install markdown or discount');
+        }
+      }
+    }
+
+    str = str.replace(/\\n/g, '\n');
+    return md.parse(str).replace(/\n/g, '\\n').replace(/'/g,'&#39;');
+  },
+  
+  /**
+   * Transform coffeescript to javascript.
+   */
+
+  coffeescript: function(str){
+    str = str.replace(/\\n/g, '\n');
+    var js = require('coffee-script').compile(str).replace(/\n/g, '\\n');
+    return '<script type="text/javascript">\\n' + js + '</script>';
+  }
+};
+
+}); // module: filters.js
+
+require.register("nodes/code.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - Code
  * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
  * MIT Licensed
  */
@@ -1513,28 +1368,147 @@ require.register("nodes/block-comment.js", function(module, exports, require){
 var Node = require('./node');
 
 /**
- * Initialize a `BlockComment` with the given `block`.
+ * Initialize a `Code` node with the given code `val`.
+ * Code may also be optionally buffered and escaped.
  *
  * @param {String} val
- * @param {Block} block
  * @param {Boolean} buffer
+ * @param {Boolean} escape
  * @api public
  */
 
-var BlockComment = module.exports = function BlockComment(val, block, buffer) {
-  this.block = block;
+var Code = module.exports = function Code(val, buffer, escape) {
   this.val = val;
   this.buffer = buffer;
+  this.escape = escape;
+  if (val.match(/^ *else/)) this.debug = false;
 };
 
 /**
  * Inherit from `Node`.
  */
 
-BlockComment.prototype = new Node;
-BlockComment.prototype.constructor = BlockComment;
+Code.prototype = new Node;
+Code.prototype.constructor = Code;
 
-}); // module: nodes/block-comment.js
+}); // module: nodes/code.js
+
+require.register("nodes/each.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - Each
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var Node = require('./node');
+
+/**
+ * Initialize an `Each` node, representing iteration
+ *
+ * @param {String} obj
+ * @param {String} val
+ * @param {String} key
+ * @param {Block} block
+ * @api public
+ */
+
+var Each = module.exports = function Each(obj, val, key, block) {
+  this.obj = obj;
+  this.val = val;
+  this.key = key;
+  this.block = block;
+};
+
+/**
+ * Inherit from `Node`.
+ */
+
+Each.prototype = new Node;
+Each.prototype.constructor = Each;
+
+}); // module: nodes/each.js
+
+require.register("nodes/filter.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - Filter
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var Node = require('./node')
+  , Block = require('./block');
+
+/**
+ * Initialize a `Filter` node with the given 
+ * filter `name` and `block`.
+ *
+ * @param {String} name
+ * @param {Block|Node} block
+ * @api public
+ */
+
+var Filter = module.exports = function Filter(name, block, attrs) {
+  this.name = name;
+  this.block = block;
+  this.attrs = attrs;
+  this.isASTFilter = block instanceof Block;
+};
+
+/**
+ * Inherit from `Node`.
+ */
+
+Filter.prototype = new Node;
+Filter.prototype.constructor = Filter;
+
+}); // module: nodes/filter.js
+
+require.register("nodes/literal.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - Literal
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var Node = require('./node');
+
+/**
+ * Initialize a `Literal` node with the given `str.
+ *
+ * @param {String} str
+ * @api public
+ */
+
+var Literal = module.exports = function Literal(str) {
+  this.str = str
+    .replace(/\n/g, "\\n")
+    .replace(/'/g, "\\'");
+};
+
+/**
+ * Inherit from `Node`.
+ */
+
+Literal.prototype = new Node;
+Literal.prototype.constructor = Literal;
+
+
+}); // module: nodes/literal.js
 
 require.register("nodes/block.js", function(module, exports, require){
 
@@ -1638,312 +1612,6 @@ Block.prototype.lastBlock = function(){
 
 }); // module: nodes/block.js
 
-require.register("nodes/code.js", function(module, exports, require){
-
-/*!
- * Jade - nodes - Code
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/**
- * Module dependencies.
- */
-
-var Node = require('./node');
-
-/**
- * Initialize a `Code` node with the given code `val`.
- * Code may also be optionally buffered and escaped.
- *
- * @param {String} val
- * @param {Boolean} buffer
- * @param {Boolean} escape
- * @api public
- */
-
-var Code = module.exports = function Code(val, buffer, escape) {
-  this.val = val;
-  this.buffer = buffer;
-  this.escape = escape;
-  if (val.match(/^ *else/)) this.debug = false;
-};
-
-/**
- * Inherit from `Node`.
- */
-
-Code.prototype = new Node;
-Code.prototype.constructor = Code;
-
-}); // module: nodes/code.js
-
-require.register("nodes/comment.js", function(module, exports, require){
-
-/*!
- * Jade - nodes - Comment
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/**
- * Module dependencies.
- */
-
-var Node = require('./node');
-
-/**
- * Initialize a `Comment` with the given `val`, optionally `buffer`,
- * otherwise the comment may render in the output.
- *
- * @param {String} val
- * @param {Boolean} buffer
- * @api public
- */
-
-var Comment = module.exports = function Comment(val, buffer) {
-  this.val = val;
-  this.buffer = buffer;
-};
-
-/**
- * Inherit from `Node`.
- */
-
-Comment.prototype = new Node;
-Comment.prototype.constructor = Comment;
-
-}); // module: nodes/comment.js
-
-require.register("nodes/doctype.js", function(module, exports, require){
-
-/*!
- * Jade - nodes - Doctype
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/**
- * Module dependencies.
- */
-
-var Node = require('./node');
-
-/**
- * Initialize a `Doctype` with the given `val`. 
- *
- * @param {String} val
- * @api public
- */
-
-var Doctype = module.exports = function Doctype(val) {
-  this.val = val;
-};
-
-/**
- * Inherit from `Node`.
- */
-
-Doctype.prototype = new Node;
-Doctype.prototype.constructor = Doctype;
-
-}); // module: nodes/doctype.js
-
-require.register("nodes/each.js", function(module, exports, require){
-
-/*!
- * Jade - nodes - Each
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/**
- * Module dependencies.
- */
-
-var Node = require('./node');
-
-/**
- * Initialize an `Each` node, representing iteration
- *
- * @param {String} obj
- * @param {String} val
- * @param {String} key
- * @param {Block} block
- * @api public
- */
-
-var Each = module.exports = function Each(obj, val, key, block) {
-  this.obj = obj;
-  this.val = val;
-  this.key = key;
-  this.block = block;
-};
-
-/**
- * Inherit from `Node`.
- */
-
-Each.prototype = new Node;
-Each.prototype.constructor = Each;
-
-}); // module: nodes/each.js
-
-require.register("nodes/filter.js", function(module, exports, require){
-
-/*!
- * Jade - nodes - Filter
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/**
- * Module dependencies.
- */
-
-var Node = require('./node')
-  , Block = require('./block');
-
-/**
- * Initialize a `Filter` node with the given 
- * filter `name` and `block`.
- *
- * @param {String} name
- * @param {Block|Node} block
- * @api public
- */
-
-var Filter = module.exports = function Filter(name, block, attrs) {
-  this.name = name;
-  this.block = block;
-  this.attrs = attrs;
-  this.isASTFilter = block instanceof Block;
-};
-
-/**
- * Inherit from `Node`.
- */
-
-Filter.prototype = new Node;
-Filter.prototype.constructor = Filter;
-
-}); // module: nodes/filter.js
-
-require.register("nodes/index.js", function(module, exports, require){
-
-/*!
- * Jade - nodes
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-exports.Node = require('./node');
-exports.Tag = require('./tag');
-exports.Code = require('./code');
-exports.Each = require('./each');
-exports.Text = require('./text');
-exports.Block = require('./block');
-exports.Mixin = require('./mixin');
-exports.Filter = require('./filter');
-exports.Comment = require('./comment');
-exports.Literal = require('./literal');
-exports.BlockComment = require('./block-comment');
-exports.Doctype = require('./doctype');
-
-}); // module: nodes/index.js
-
-require.register("nodes/literal.js", function(module, exports, require){
-
-/*!
- * Jade - nodes - Literal
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/**
- * Module dependencies.
- */
-
-var Node = require('./node');
-
-/**
- * Initialize a `Literal` node with the given `str.
- *
- * @param {String} str
- * @api public
- */
-
-var Literal = module.exports = function Literal(str) {
-  this.str = str;
-};
-
-/**
- * Inherit from `Node`.
- */
-
-Literal.prototype = new Node;
-Literal.prototype.constructor = Literal;
-
-
-}); // module: nodes/literal.js
-
-require.register("nodes/mixin.js", function(module, exports, require){
-
-/*!
- * Jade - nodes - Mixin
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/**
- * Module dependencies.
- */
-
-var Node = require('./node');
-
-/**
- * Initialize a new `Mixin` with `name` and `block`.
- *
- * @param {String} name
- * @param {String} args
- * @param {Block} block
- * @api public
- */
-
-var Mixin = module.exports = function Mixin(name, args, block){
-  this.name = name;
-  this.args = args;
-  this.block = block;
-};
-
-/**
- * Inherit from `Node`.
- */
-
-Mixin.prototype = new Node;
-Mixin.prototype.constructor = Mixin;
-
-
-
-}); // module: nodes/mixin.js
-
-require.register("nodes/node.js", function(module, exports, require){
-
-/*!
- * Jade - nodes - Node
- * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
- */
-
-/**
- * Initialize a `Node`.
- *
- * @api public
- */
-
-var Node = module.exports = function Node(){};
-}); // module: nodes/node.js
-
 require.register("nodes/tag.js", function(module, exports, require){
 
 /*!
@@ -2030,6 +1698,131 @@ Tag.prototype.getAttribute = function(name){
 
 }); // module: nodes/tag.js
 
+require.register("nodes/doctype.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - Doctype
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var Node = require('./node');
+
+/**
+ * Initialize a `Doctype` with the given `val`. 
+ *
+ * @param {String} val
+ * @api public
+ */
+
+var Doctype = module.exports = function Doctype(val) {
+  this.val = val;
+};
+
+/**
+ * Inherit from `Node`.
+ */
+
+Doctype.prototype = new Node;
+Doctype.prototype.constructor = Doctype;
+
+}); // module: nodes/doctype.js
+
+require.register("nodes/mixin.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - Mixin
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var Node = require('./node');
+
+/**
+ * Initialize a new `Mixin` with `name` and `block`.
+ *
+ * @param {String} name
+ * @param {String} args
+ * @param {Block} block
+ * @api public
+ */
+
+var Mixin = module.exports = function Mixin(name, args, block){
+  this.name = name;
+  this.args = args;
+  this.block = block;
+};
+
+/**
+ * Inherit from `Node`.
+ */
+
+Mixin.prototype = new Node;
+Mixin.prototype.constructor = Mixin;
+
+
+
+}); // module: nodes/mixin.js
+
+require.register("nodes/case.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - Case
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var Node = require('./node');
+
+/**
+ * Initialize a new `Case` with `expr`.
+ *
+ * @param {String} expr
+ * @api public
+ */
+
+var Case = exports = module.exports = function Case(expr, block){
+  this.expr = expr;
+  this.block = block;
+};
+
+/**
+ * Inherit from `Node`.
+ */
+
+Case.prototype = new Node;
+Case.prototype.constructor = Case;
+
+
+var When = exports.When = function When(expr, block){
+  this.expr = expr;
+  this.block = block;
+  this.debug = false;
+};
+
+/**
+ * Inherit from `Node`.
+ */
+
+When.prototype = new Node;
+When.prototype.constructor = When;
+
+
+
+}); // module: nodes/case.js
+
 require.register("nodes/text.js", function(module, exports, require){
 
 /*!
@@ -2077,6 +1870,327 @@ Text.prototype.push = function(node){
 };
 
 }); // module: nodes/text.js
+
+require.register("nodes/comment.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - Comment
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var Node = require('./node');
+
+/**
+ * Initialize a `Comment` with the given `val`, optionally `buffer`,
+ * otherwise the comment may render in the output.
+ *
+ * @param {String} val
+ * @param {Boolean} buffer
+ * @api public
+ */
+
+var Comment = module.exports = function Comment(val, buffer) {
+  this.val = val;
+  this.buffer = buffer;
+};
+
+/**
+ * Inherit from `Node`.
+ */
+
+Comment.prototype = new Node;
+Comment.prototype.constructor = Comment;
+
+}); // module: nodes/comment.js
+
+require.register("nodes/node.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - Node
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Initialize a `Node`.
+ *
+ * @api public
+ */
+
+var Node = module.exports = function Node(){};
+}); // module: nodes/node.js
+
+require.register("nodes/block-comment.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes - BlockComment
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var Node = require('./node');
+
+/**
+ * Initialize a `BlockComment` with the given `block`.
+ *
+ * @param {String} val
+ * @param {Block} block
+ * @param {Boolean} buffer
+ * @api public
+ */
+
+var BlockComment = module.exports = function BlockComment(val, block, buffer) {
+  this.block = block;
+  this.val = val;
+  this.buffer = buffer;
+};
+
+/**
+ * Inherit from `Node`.
+ */
+
+BlockComment.prototype = new Node;
+BlockComment.prototype.constructor = BlockComment;
+
+}); // module: nodes/block-comment.js
+
+require.register("nodes/index.js", function(module, exports, require){
+
+/*!
+ * Jade - nodes
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+exports.Node = require('./node');
+exports.Tag = require('./tag');
+exports.Code = require('./code');
+exports.Each = require('./each');
+exports.Case = require('./case');
+exports.Text = require('./text');
+exports.Block = require('./block');
+exports.Mixin = require('./mixin');
+exports.Filter = require('./filter');
+exports.Comment = require('./comment');
+exports.Literal = require('./literal');
+exports.BlockComment = require('./block-comment');
+exports.Doctype = require('./doctype');
+
+}); // module: nodes/index.js
+
+require.register("jade.js", function(module, exports, require){
+
+/*!
+ * Jade
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+
+var Parser = require('./parser')
+  , Lexer = require('./lexer')
+  , Compiler = require('./compiler')
+  , runtime = require('./runtime')
+
+/**
+ * Library version.
+ */
+
+exports.version = '0.16.2';
+
+/**
+ * Expose self closing tags.
+ */
+
+exports.selfClosing = require('./self-closing');
+
+/**
+ * Default supported doctypes.
+ */
+
+exports.doctypes = require('./doctypes');
+
+/**
+ * Text filters.
+ */
+
+exports.filters = require('./filters');
+
+/**
+ * Utilities.
+ */
+
+exports.utils = require('./utils');
+
+/**
+ * Expose `Compiler`.
+ */
+
+exports.Compiler = Compiler;
+
+/**
+ * Expose `Parser`.
+ */
+
+exports.Parser = Parser;
+
+/**
+ * Expose `Lexer`.
+ */
+
+exports.Lexer = Lexer;
+
+/**
+ * Nodes.
+ */
+
+exports.nodes = require('./nodes');
+
+/**
+ * Jade runtime helpers.
+ */
+
+exports.runtime = runtime;
+
+/**
+ * Template function cache.
+ */
+
+exports.cache = {};
+
+/**
+ * Parse the given `str` of jade and return a function body.
+ *
+ * @param {String} str
+ * @param {Object} options
+ * @return {String}
+ * @api private
+ */
+
+function parse(str, options){
+  try {
+    // Parse
+    var parser = new Parser(str, options.filename, options);
+
+    // Compile
+    var compiler = new (options.compiler || Compiler)(parser.parse(), options)
+      , js = compiler.compile();
+
+    // Debug compiler
+    if (options.debug) {
+      console.error('\nCompiled Function:\n\n\033[90m%s\033[0m', js.replace(/^/gm, '  '));
+    }
+
+    return ''
+      + 'var buf = [];\n'
+      + (options.self
+        ? 'var self = locals || {};\n' + js
+        : 'with (locals || {}) {\n' + js + '\n}\n')
+      + 'return buf.join("");';
+  } catch (err) {
+    parser = parser.context();
+    runtime.rethrow(err, parser.filename, parser.lexer.lineno);
+  }
+}
+
+/**
+ * Compile a `Function` representation of the given jade `str`.
+ *
+ * Options:
+ * 
+ *   - `compileDebug` when `false` debugging code is stripped from the compiled template
+ *   - `client` when `true` the helper functions `escape()` etc will reference `jade.escape()`
+ *      for use with the Jade client-side runtime.js
+ *
+ * @param {String} str
+ * @param {Options} options
+ * @return {Function}
+ * @api public
+ */
+
+exports.compile = function(str, options){
+  var options = options || {}
+    , client = options.client
+    , filename = options.filename
+      ? JSON.stringify(options.filename)
+      : 'undefined'
+    , fn;
+
+  if (options.compileDebug !== false) {
+    fn = [
+        'var __ = [{ lineno: 1, filename: ' + filename + ' }];'
+      , 'try {'
+      , parse(String(str), options || {})
+      , '} catch (err) {'
+      , '  rethrow(err, __[0].filename, __[0].lineno);'
+      , '}'
+    ].join('\n');
+  } else {
+    fn = parse(String(str), options || {});
+  }
+
+  if (client) {
+    fn = 'var attrs = jade.attrs, escape = jade.escape, rethrow = jade.rethrow;\n' + fn;
+  }
+
+  fn = new Function('locals, attrs, escape, rethrow', fn);
+
+  if (client) return fn;
+
+  return function(locals){
+    return fn(locals, runtime.attrs, runtime.escape, runtime.rethrow);
+  };
+};
+
+/**
+ * Render the given `str` of jade and invoke
+ * the callback `fn(err, str)`.
+ *
+ * Options:
+ *
+ *   - `cache` enable template caching
+ *   - `filename` filename required for `include` / `extends` and caching
+ *
+ * @param {String} str
+ * @param {Object|Function} options or fn
+ * @param {Function} fn
+ * @api public
+ */
+
+exports.render = function(str, options, fn){
+  // swap args
+  if ('function' == typeof options) {
+    fn = options, options = {};
+  }
+
+  // cache requires .filename
+  if (options.cache && !options.filename) {
+    return fn(new Error('the "filename" option is required for caching'));
+  }
+
+  try {
+    var path = options.filename;
+    var tmpl = options.cache
+      ? exports.cache[path] || (exports.cache[path] = exports.compile(str, options))
+      : exports.compile(str, options);
+    fn(null, tmpl(options));
+  } catch (err) {
+    fn(err);
+  }
+};
+}); // module: jade.js
 
 require.register("parser.js", function(module, exports, require){
 
@@ -2271,6 +2385,12 @@ Parser.prototype = {
         return this.parseMixin();
       case 'block':
         return this.parseBlock();
+      case 'case':
+        return this.parseCase();
+      case 'when':
+        return this.parseWhen();
+      case 'default':
+        return this.parseDefault();
       case 'extends':
         return this.parseExtends();
       case 'include':
@@ -2308,7 +2428,51 @@ Parser.prototype = {
     node.line = this.line();
     return node;
   },
+
+  /**
+   *   ':' expr
+   * | block
+   */
+
+  parseBlockExpansion: function(){
+    if (':' == this.peek().type) {
+      this.advance();
+      return new nodes.Block(this.parseExpr());
+    } else {
+      return this.block();
+    }
+  },
+
+  /**
+   * case
+   */
+
+  parseCase: function(){
+    var val = this.expect('case').val
+      , node = new nodes.Case(val);
+    node.line = this.line();
+    node.block = this.block();
+    return node;
+  },
+
+  /**
+   * when
+   */
+
+  parseWhen: function(){
+    var val = this.expect('when').val
+    return new nodes.Case.When(val, this.parseBlockExpansion());
+  },
   
+  /**
+   * default
+   */
+
+  parseDefault: function(){
+    this.expect('default');
+    return new nodes.Case.When('default', this.parseBlockExpansion());
+  },
+
   /**
    * code
    */
@@ -2398,8 +2562,9 @@ Parser.prototype = {
   
   parseEach: function(){
     var tok = this.expect('each')
-      , node = new nodes.Each(tok.code, tok.val, tok.key, this.block());
+      , node = new nodes.Each(tok.code, tok.val, tok.key);
     node.line = this.line();
+    node.block = this.block();
     return node;
   },
 
@@ -2461,14 +2626,19 @@ Parser.prototype = {
     if (!this.filename)
       throw new Error('the "filename" option is required to use includes');
 
+    // no extension
+    if (!~basename(path).indexOf('.')) {
+      path += '.jade';
+    }
+
     // non-jade
-    if (~basename(path).indexOf('.')) {
+    if ('.jade' != path.substr(-5)) {
       var path = join(dir, path)
         , str = fs.readFileSync(path, 'utf8');
       return new nodes.Literal(str);
     }
 
-    var path = join(dir, path + '.jade')
+    var path = join(dir, path)
       , str = fs.readFileSync(path, 'utf8')
      , parser = new Parser(str, path, this.options);
 
@@ -2773,26 +2943,26 @@ exports.rethrow = function rethrow(err, filename, lineno){
 
 }); // module: runtime.js
 
-require.register("self-closing.js", function(module, exports, require){
+require.register("doctypes.js", function(module, exports, require){
 
 /*!
- * Jade - self closing tags
+ * Jade - doctypes
  * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
  * MIT Licensed
  */
 
-module.exports = [
-    'meta'
-  , 'img'
-  , 'link'
-  , 'input'
-  , 'area'
-  , 'base'
-  , 'col'
-  , 'br'
-  , 'hr'
-];
-}); // module: self-closing.js
+module.exports = {
+    '5': '<!DOCTYPE html>'
+  , 'xml': '<?xml version="1.0" encoding="utf-8" ?>'
+  , 'default': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
+  , 'transitional': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
+  , 'strict': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
+  , 'frameset': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">'
+  , '1.1': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
+  , 'basic': '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">'
+  , 'mobile': '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">'
+};
+}); // module: doctypes.js
 
 require.register("utils.js", function(module, exports, require){
 

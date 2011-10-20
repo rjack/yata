@@ -1,0 +1,13 @@
+!!! 5
+html
+  head
+    title #{title} | YATA
+  body
+    h1 #{title}
+
+    #{description}
+
+    if rows && rows.length > 0
+        ul
+          for row in rows
+            li=row

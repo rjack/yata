@@ -1,6 +1,7 @@
-Mustache = require 'vendor/lib/mustache'
-
 (doc, req) ->
+    Mustache = require 'vendor/lib/mustache'
+    jade = require 'vendor/lib/jade'
+
     provides 'html', ->
 
         start headers:
@@ -8,4 +9,8 @@ Mustache = require 'vendor/lib/mustache'
 
         doc.is_doc = true
 
-        Mustache.to_html @templates.html5, doc
+        if req.query?.render is 'jade'
+            send jade.render @templates.html5_jade, locals: doc
+        else
+            send Mustache.to_html @templates.html5_mustache, doc
+        null
