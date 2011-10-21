@@ -10,7 +10,8 @@
         doc.is_doc = true
 
         if req.query?.render is 'jade'
-            send jade.render @templates.html5_jade, locals: doc
+            doc.engine = 'jade'
+            jade.render @templates.html5_jade, locals: doc
         else
-            send Mustache.to_html @templates.html5_mustache, doc
-        null
+            doc.engine = 'mustache'
+            Mustache.to_html @templates.html5_mustache, doc
