@@ -9,7 +9,7 @@
             #JSON.stringify row
             row
 
-        send Mustache.to_html @templates.html5,
+        send Mustache.to_html @templates.html5_mustache,
             title: 'Listona'
             rows: rows
             "list?": true
