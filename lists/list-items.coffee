@@ -2,14 +2,20 @@
     Mustache = require 'vendor/lib/mustache'
 
     provides 'html', ->
-        start headers:
-            'Content-Type': 'text/html'
 
-        rows = while (row = getRow())
-            #JSON.stringify row
-            row
+        partials =
+            body: @templates.partials.body_list
+            head: @templates.partials.head
 
-        send Mustache.to_html @templates.html5_mustache,
-            title: 'Listona'
-            rows: rows
-            "list?": true
+        title = req.path[req.path.length - 1]
+
+        view =
+            shows_root: "/#{req.path[0..-4].concat(['_show', 'item']).join('/')}"
+            head:
+                title: title
+            body:
+                title: title
+                items: (while (row = getRow())
+                    row)
+
+        Mustache.to_html @templates.html5, view, partials

@@ -1,21 +1,9 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <title>{{title}} | YATA</title>
+    {{>head}}
   </head>
-
   <body>
-    <h1>{{title}}</h1>
-
-    {{description}}
-
-    {{#list?}}
-      <ul>
-        {{#rows}}
-          <li><a href="/yata/_design/yata/_show/item/{{id}}">{{#value}}{{doc_title}}{{/value}}</a></li>
-        {{/rows}}
-      </ul>
-    {{/list?}}
+    {{>body}}
   </body>
 </html>
