@@ -12,6 +12,6 @@
             title: doc.title
             author: doc.author
             body:
-                content: doc.description.html
+                content: doc.description?.html
 
         Mustache.to_html @templates.html5, view, partials
