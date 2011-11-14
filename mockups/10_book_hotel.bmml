@@ -1,0 +1,70 @@
+<mockup version="1.0" skin="sketch" measuredW="981" measuredH="657" mockupW="969" mockupH="648">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="12" y="9" w="969" h="648" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>YATA%0Ahttp%3A//127.0.0.1/A/DECENT/URL</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Title" x="27" y="126" w="284" h="-1" measuredW="198" measuredH="50" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>left</align>
+        <text>Book%20Hotel</text>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::StickyNote" x="1009" y="9" w="383" h="618" measuredW="109" measuredH="123" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Esempio%3A%20*appunti%20per%20scelta%20hotel*%0A%20%0AUtilizzi%3A%0A*%20raccogliere%20informazioni%20per%20fare%20una%20scelta%0A*%20visualizzare%20luoghi%0A%20%0A*1.%20Link%20esterni*%0A%20%0AInserire%20un%20link%20in%20un%20doc%20deve%20diventare%20un%20%3Ca%3E%20cliccabile.%0A%20%0A*2.%20Indirizzi*%0A%20%0AGli%20indirizzi%20potrebbero%20essere%20visualizzati%20con%20le%20API%20di%20Google%20Maps%20o%20di%20OpenStreetMap.%0A%20%0A*3.%20Parent%20document*%0A%20%0AQuesto%20doc%20ha%20%5BWinter%20Holidays%5D%20come%20parent.</text>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::Label" x="27" y="176" w="160" h="21" measuredW="155" measuredH="21" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Tags%3A%20winter%20holidays%202011</text>
+      </controlProperties>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::SubTitle" x="27" y="256" w="-1" h="-1" measuredW="176" measuredH="33" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Royal%20Cippalippa</text>
+      </controlProperties>
+    </control>
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::Paragraph" x="27" y="220" w="176" h="21" measuredW="200" measuredH="140" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Hotels%20found%20so%20far%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="24" controlTypeID="com.balsamiq.mockups::Paragraph" x="27" y="289" w="438" h="106" measuredW="200" measuredH="140" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Link%3A%20%5Bhttp%3A//www.royalcippalippa.com/%5D%0ARating%3A%205%20stars%0APrice%3A%2050USD/night%0AAddress%3A%20One%20Eastern%20Gateway%2C%20Royal%20Victoria%20Dock%2C%20E16%201FR%20Londra</text>
+      </controlProperties>
+    </control>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::CallOut" x="244" y="267" w="37" h="43" measuredW="37" measuredH="39" zOrder="7" locked="false" isInGroup="-1"/>
+    <control controlID="26" controlTypeID="com.balsamiq.mockups::CallOut" x="528" y="324" w="-1" h="-1" measuredW="38" measuredH="40" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>2</text>
+      </controlProperties>
+    </control>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::Image" x="566" y="95" w="-1" h="-1" measuredW="400" measuredH="270" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>square</borderStyle>
+        <filter>true</filter>
+        <src>./assets/google_maps_royal_cippalippa.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::CallOut" x="427" y="317" w="-1" h="-1" measuredW="38" measuredH="39" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>2</text>
+      </controlProperties>
+    </control>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="27" y="95" w="-1" h="-1" measuredW="177" measuredH="24" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <hrefs>00_winter_holidays%26bm%3B00_winter_holidays.bmml%26bm%3B00_winter_holidays.bmml%26bm%3B00_winter_holidays.bmml%2C</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C89%2C112%2C110%22%20href%3D%2200_winter_holidays.bmml%22%20alt%3D%2200_winter_holidays%22%20id%3D%2229_0%22/%3E%0A</map>
+        <text>Winter%20Holidays%2C%20Book%20Hotel</text>
+      </controlProperties>
+    </control>
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::CallOut" x="207" y="85" w="-1" h="-1" measuredW="38" measuredH="39" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>3</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
