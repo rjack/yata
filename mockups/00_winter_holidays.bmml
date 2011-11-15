@@ -11,12 +11,12 @@
         <text>Winter%20Holidays</text>
       </controlProperties>
     </control>
-    <control controlID="17" controlTypeID="com.balsamiq.mockups::StickyNote" x="939" y="0" w="383" h="482" measuredW="109" measuredH="123" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::StickyNote" x="939" y="0" w="383" h="482" measuredW="109" measuredH="123" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Esempio%3A%20*pianificazione%20vacanze*%0A%20%0AUtilizzi%3A%0A*%20diario%20%28alla%20fine%20di%20una%20giornata%20particolarmente%20bella%2C%20scrivere%20ricordi%20e%20impressioni%29%0A*%20todo%20/%20done%20%28task%20list%2C%20reminder%2C%20calendar%29%0A*%20contabilita%27%20%28alla%20GNUCash%29%0A%20%0A*1.%20Lista%20dei%20task*%0A%20%0AOgni%20task%20puo%27%20avere%20o%20menu%20un%20documento%20associato.%0A%20%0ASe%20tutte%20le%20task%20del%20documento%20associato%20sono%20completate%2C%20la%20entry%20e%27%20completata.%0A%20%0A*2.%20Task%20gerarchiche*%0A%20%0AIn%20questo%20caso%20%5Bbook%20hotel%5D%20ha%20un%20doc%20a%20parte%20perche%27%20voglio%20tenere%20la%20lista%20degli%20hotel%20che%20ho%20prese%20in%20considerazione%2C%20con%20costi%2C%20link%20ai%20siti%20e%20alle%20mappe%2C%20mie%20considerazioni%2C%20etc.%0A%20%0ALa%20barra%20di%20avanzamento%20mostra%20lo%20stato%20di%20avanzamento%20della%20task%20%22figlia%22.</text>
+        <text>Esempio%3A%20*pianificazione%20vacanze*%0A%20%0AUtilizzi%3A%0A*%20diario%20%28alla%20fine%20di%20una%20giornata%20particolarmente%20bella%2C%20scrivere%20ricordi%20e%20impressioni%29%0A*%20todo%20/%20done%20%28task%20list%2C%20reminder%2C%20calendar%29%0A*%20contabilita%27%20%28alla%20GNUCash%29%0A%20%0A*1.%20Lista%20dei%20task*%0A%20%0AOgni%20task%20puo%27%20avere%20o%20meno%20un%20documento%20associato.%0A%20%0ASe%20tutte%20le%20task%20del%20documento%20associato%20sono%20completate%2C%20la%20entry%20e%27%20completata.%0A%20%0A*2.%20Task%20gerarchiche*%0A%20%0AIn%20questo%20caso%20%5Bbook%20hotel%5D%20ha%20un%20doc%20a%20parte%20perche%27%20voglio%20scrivere%20una%20lista%20degli%20hotel%20che%20ho%20preso%20in%20considerazione%2C%20per%20poter%20confrontare%20caratteristiche%20e%20costi%2C%20aggiungendo%20link%20ai%20siti%20e%20alle%20mappe%2C%20mie%20considerazioni%2C%20etc.%0A%20%0ALa%20barra%20mostra%20lo%20stato%20di%20avanzamento%20della%20task%20%22figlia%22.</text>
       </controlProperties>
     </control>
-    <control controlID="18" controlTypeID="com.balsamiq.mockups::Label" x="27" y="145" w="160" h="21" measuredW="155" measuredH="21" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::Label" x="27" y="145" w="160" h="21" measuredW="155" measuredH="21" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Tags%3A%20winter%20holidays%202011</text>
       </controlProperties>
@@ -49,7 +49,7 @@
       </groupChildrenDescriptors>
     </control>
     <control controlID="31" controlTypeID="com.balsamiq.mockups::CallOut" x="138" y="191" w="-1" h="-1" measuredW="36" measuredH="37" zOrder="5" locked="false" isInGroup="-1"/>
-    <control controlID="32" controlTypeID="com.balsamiq.mockups::CallOut" x="403" y="228" w="-1" h="-1" measuredW="39" measuredH="43" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::CallOut" x="403" y="228" w="-1" h="-1" measuredW="39" measuredH="40" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>2</text>
       </controlProperties>
