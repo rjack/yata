@@ -1,6 +1,6 @@
-<mockup version="1.0" skin="sketch" measuredW="1424" measuredH="657" mockupW="1412" mockupH="648">
+<mockup version="1.0" skin="sketch" measuredW="1322" measuredH="482" mockupW="1310" mockupH="482">
   <controls>
-    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="12" y="9" w="1023" h="648" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="12" y="1" w="905" h="481" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
         <text>YATA%0Ahttp%3A//127.0.0.1/A/DECENT/URL</text>
       </controlProperties>
@@ -11,7 +11,7 @@
         <text>Winter%20Holidays</text>
       </controlProperties>
     </control>
-    <control controlID="17" controlTypeID="com.balsamiq.mockups::StickyNote" x="1041" y="9" w="383" h="618" measuredW="109" measuredH="123" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::StickyNote" x="939" y="0" w="383" h="482" measuredW="109" measuredH="123" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Esempio%3A%20*pianificazione%20vacanze*%0A%20%0AUtilizzi%3A%0A*%20diario%20%28alla%20fine%20di%20una%20giornata%20particolarmente%20bella%2C%20scrivere%20ricordi%20e%20impressioni%29%0A*%20todo%20/%20done%20%28task%20list%2C%20reminder%2C%20calendar%29%0A*%20contabilita%27%20%28alla%20GNUCash%29%0A%20%0A*1.%20Lista%20dei%20task*%0A%20%0AOgni%20task%20puo%27%20avere%20o%20menu%20un%20documento%20associato.%0A%20%0ASe%20tutte%20le%20task%20del%20documento%20associato%20sono%20completate%2C%20la%20entry%20e%27%20completata.%0A%20%0AIn%20questo%20caso%20%5Bbook%20hotel%5D%20ha%20un%20doc%20a%20parte%20perche%27%20voglio%20tenere%20la%20lista%20degli%20hotel%20che%20ho%20prese%20in%20considerazione%2C%20con%20costi%2C%20link%20ai%20siti%20e%20alle%20mappe%2C%20mie%20considerazioni%2C%20etc.</text>
       </controlProperties>
@@ -22,9 +22,9 @@
       </controlProperties>
     </control>
     <control controlID="21" controlTypeID="com.balsamiq.mockups::CallOut" x="112" y="181" w="-1" h="-1" measuredW="37" measuredH="39" zOrder="4" locked="false" isInGroup="-1"/>
-    <control controlID="23" controlTypeID="__group__" x="27" y="177" w="400" h="197" measuredW="400" measuredH="197" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="23" controlTypeID="__group__" x="27" y="177" w="400" h="114" measuredW="400" measuredH="114" zOrder="5" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
-        <control controlID="0" controlTypeID="com.balsamiq.mockups::DataGrid" x="0" y="0" w="400" h="197" measuredW="262" measuredH="145" zOrder="0" locked="false" isInGroup="23">
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::DataGrid" x="0" y="0" w="400" h="114" measuredW="261" measuredH="145" zOrder="0" locked="false" isInGroup="23">
           <controlProperties>
             <hLines>false</hLines>
             <selectedIndex>-1</selectedIndex>
@@ -34,15 +34,20 @@
             <vLines>true</vLines>
           </controlProperties>
         </control>
-        <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="7" y="58" w="63" h="19" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="23">
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="7" y="34" w="63" h="11" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="23">
           <controlProperties>
             <backgroundAlpha>0</backgroundAlpha>
             <borderStyle>none</borderStyle>
             <href>10_book_hotel%26bm%3B10_book_hotel.bmml%26bm%3B10_book_hotel.bmml%26bm%3B10_book_hotel.bmml</href>
-            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2222%2C226%2C85%2C245%22%20href%3D%2210_book_hotel.bmml%22%20alt%3D%2210_book_hotel%22%20id%3D%221%22/%3E</map>
+            <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2222%2C211%2C85%2C222%22%20href%3D%2210_book_hotel.bmml%22%20alt%3D%2210_book_hotel%22%20id%3D%221%22/%3E</map>
           </controlProperties>
         </control>
       </groupChildrenDescriptors>
+    </control>
+    <control controlID="24" controlTypeID="com.balsamiq.mockups::CallOut" x="365" y="205" w="-1" h="-1" measuredW="37" measuredH="40" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>1</text>
+      </controlProperties>
     </control>
   </controls>
 </mockup>
