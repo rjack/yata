@@ -36,7 +36,7 @@
         <text>Link%3A%20%5Bhttp%3A//www.royalcippalippa.com/%5D%0ARating%3A%205%20stars%0APrice%3A%2050USD/night%0AAddress%3A%20One%20Eastern%20Gateway%2C%20Royal%20Victoria%20Dock%2C%20E16%201FR%20Londra</text>
       </controlProperties>
     </control>
-    <control controlID="25" controlTypeID="com.balsamiq.mockups::CallOut" x="244" y="267" w="37" h="43" measuredW="37" measuredH="39" zOrder="7" locked="false" isInGroup="-1"/>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::CallOut" x="244" y="267" w="37" h="43" measuredW="36" measuredH="39" zOrder="7" locked="false" isInGroup="-1"/>
     <control controlID="27" controlTypeID="com.balsamiq.mockups::Image" x="480" y="95" w="-1" h="-1" measuredW="400" measuredH="270" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
         <borderStyle>square</borderStyle>
@@ -45,7 +45,7 @@
         <text/>
       </controlProperties>
     </control>
-    <control controlID="28" controlTypeID="com.balsamiq.mockups::CallOut" x="427" y="317" w="-1" h="-1" measuredW="39" measuredH="37" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::CallOut" x="427" y="317" w="-1" h="-1" measuredW="39" measuredH="43" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
         <text>2</text>
       </controlProperties>
@@ -57,7 +57,7 @@
         <text>Winter%20Holidays%2C%20Book%20Hotel</text>
       </controlProperties>
     </control>
-    <control controlID="30" controlTypeID="com.balsamiq.mockups::CallOut" x="207" y="85" w="-1" h="-1" measuredW="38" measuredH="43" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::CallOut" x="207" y="85" w="-1" h="-1" measuredW="39" measuredH="40" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
         <text>3</text>
       </controlProperties>
@@ -66,13 +66,13 @@
       <controlProperties>
         <hLines>false</hLines>
         <selectedIndex>-1</selectedIndex>
-        <text>Task%5Cr%2C%20Due%20To%20%5E%2C%20Done%3F%0Achoose%20hotel%2C%20%2C%20%5B%5D%0Abook%20hotel%2C%2015/11/2011%2C%20%5B%5D%0Aprint%20reservation%2C%20%2C%20%5B%5D%0A%7B50%2C%2025%2C%2025%7D</text>
+        <text>Task%5Cr%2C%20Due%20To%20%5E%2C%20Done%3F%0Achoose%20hotel%2C%20%2C%20%5Bx%5D%0Abook%20hotel%2C%2015/11/2011%2C%20%5B%5D%0Aprint%20reservation%2C%20%2C%20%5B%5D%0A%7B50%2C%2025%2C%2025%7D</text>
         <value>0</value>
         <verticalScrollbar>false</verticalScrollbar>
         <vLines>true</vLines>
       </controlProperties>
     </control>
-    <control controlID="33" controlTypeID="com.balsamiq.mockups::CallOut" x="376" y="448" w="-1" h="-1" measuredW="39" measuredH="40" zOrder="13" locked="false" isInGroup="-1">
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::CallOut" x="376" y="448" w="-1" h="-1" measuredW="39" measuredH="37" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <text>4</text>
       </controlProperties>
